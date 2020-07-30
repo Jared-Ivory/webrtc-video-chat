@@ -6,7 +6,7 @@ const socket = require('socket.io');
 
 const io = socket(server);
 
-const SERVER_PORT = 6000;
+const SERVER_PORT = 8080;
 
 server.listen(SERVER_PORT, () =>
     console.log(`Server is running on port ${SERVER_PORT}`)

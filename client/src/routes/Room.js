@@ -12,6 +12,8 @@ export default function Room(props) {
     const senders = useRef([]);
 
     useEffect(() => {
+        console.log(navigator);
+
         navigator.mediaDevices
             .getUserMedia({ audio: true })
             .then((stream) => {
@@ -157,12 +159,11 @@ export default function Room(props) {
                 if (x) {
                     x.replaceTrack(screenTrack);
                 } else {
-                    console.log(screenTrack);
-                    console.log(userStream.current.addTrack(screenTrack));
-                    //userVideo.current.addTrack(screenTrack, stream);
+                    userStream.current.addTrack(screenTrack);
                 }
 
                 screenTrack.onended = function () {
+                    console.log('Stopped Screensharing');
                     senders.current
                         .find((sender) => sender.track.kind === 'video')
                         .replaceTrack(userStream.current.getTracks()[1]);
