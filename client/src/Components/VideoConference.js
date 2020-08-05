@@ -32,6 +32,7 @@ export default function VideoConference(props) {
         return function cleanup() {
             //close up shop
             //socketRef.current.close();
+        };
     });
 
     function getPeers(users) {
