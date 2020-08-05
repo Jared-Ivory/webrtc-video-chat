@@ -16,16 +16,18 @@ const rooms = {};
 
 io.on('connection', (socket) => {
     socket.on('join room', (roomID) => {
-        if (rooms[roomID]) {
+        //Check to see if roomID is valid; Checks for singleton participants
+        if (rooms[roomID] && !rooms[roomID].includes(socket.id)) {
             rooms[roomID].push(socket.id);
+            console.log(greeting(socket.id, roomID));
         } else {
+            console.log(greeting(socket.id, roomID));
             rooms[roomID] = [socket.id];
         }
-        const otherUser = rooms[roomID].find((id) => id !== socket.id);
-        if (otherUser) {
-            socket.emit('other user', otherUser);
-            socket.to(otherUser).emit('user joined', socket.id);
-        }
+
+        //returns the ids of those in the specified room
+        socket.emit('all users', rooms[roomID]);
+        console.log(rooms[roomID].length);
     });
 
     socket.on('offer', (payload) => {
@@ -41,3 +43,7 @@ io.on('connection', (socket) => {
         io.to(incoming.target).emit('ice-candidate', incoming.candidate);
     });
 });
+
+function greeting(socketID, roomID) {
+    return `User ${socketID} has joined Room ${roomID}`;
+}
